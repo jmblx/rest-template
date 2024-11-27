@@ -47,26 +47,26 @@
 #     )
 #
 #     assert response.status_code == 200
-#     data = response.json()
+#     command = response.json()
 #
 #     if expected_error_message:
 #         assert (
-#             "errors" in data
+#             "errors" in command
 #         ), "Expected errors in the response, but none were found."
-#         error_messages = [error["message"] for error in data["errors"]]
+#         error_messages = [error["message"] for error in command["errors"]]
 #         assert (
 #             expected_error_message in error_messages
 #         ), f"Expected error message '{expected_error_message}' not found in response."
 #     else:
 #         assert (
-#             "data" in data
-#         ), "Expected data in the response, but none were found."
+#             "command" in command
+#         ), "Expected command in the response, but none were found."
 #         assert (
-#             "authUser" in data["data"]
-#         ), "Expected 'authUser' field in the response data, but none were found."
-#         assert "token" in data["data"]["authUser"]["accessToken"]
-#         assert "expires_in" in data["data"]["authUser"]["accessToken"]
-#         assert "created_at" in data["data"]["authUser"]["accessToken"]
+#             "authUser" in command["command"]
+#         ), "Expected 'authUser' field in the response command, but none were found."
+#         assert "token" in command["command"]["authUser"]["accessToken"]
+#         assert "expires_in" in command["command"]["authUser"]["accessToken"]
+#         assert "created_at" in command["command"]["authUser"]["accessToken"]
 #
 #
 # @pytest.mark.asyncio
@@ -247,7 +247,7 @@
 #     query = f"""
 #     mutation {{
 #         addUser(
-#             data: {{
+#             command: {{
 #                 firstName: "{first_name}"
 #                 lastName: "{last_name}"
 #                 roleId: {role_id}
@@ -269,23 +269,23 @@
 #     response = await ac.post("/graphql", json={"query": query})
 #
 #     assert response.status_code == 200
-#     data = response.json()
+#     command = response.json()
 #
 #     if expected_error_message:
 #         assert (
-#             "errors" in data
+#             "errors" in command
 #         ), "Expected errors in the response, but none were found."
-#         error_messages = [error["message"] for error in data["errors"]]
+#         error_messages = [error["message"] for error in command["errors"]]
 #         assert (
 #             expected_error_message in error_messages
 #         ), f"Expected error message '{expected_error_message}' not found in response."
 #     else:
 #         assert (
-#             "data" in data
-#         ), "Expected data in the response, but none were found."
+#             "command" in command
+#         ), "Expected command in the response, but none were found."
 #         assert (
-#             "addUser" in data["data"]
-#         ), "Expected 'addUser' field in the response data, but none were found."
+#             "addUser" in command["command"]
+#         ), "Expected 'addUser' field in the response command, but none were found."
 #         assert (
-#             "id" in data["data"]["addUser"]
-#         ), "Expected 'id' field in the 'addUser' response data, but none were found."
+#             "id" in command["command"]["addUser"]
+#         ), "Expected 'id' field in the 'addUser' response command, but none were found."

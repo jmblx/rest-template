@@ -1,9 +1,9 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from domain.entities.role.value_objects import RoleID, RoleName
 
 
 @dataclass
 class Role:
-    id: RoleID
+    id: RoleID = field(init=False)
     name: RoleName

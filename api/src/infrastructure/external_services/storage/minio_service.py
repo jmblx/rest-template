@@ -1,7 +1,7 @@
 import boto3
 from botocore.client import Config
 
-from settings.config import MinIOConfig
+from infrastructure.external_services.storage.config import MinIOConfig
 from domain.services.storage.storage_service import StorageServiceInterface
 
 

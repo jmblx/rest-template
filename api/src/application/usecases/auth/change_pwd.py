@@ -1,13 +1,13 @@
 from domain.services.auth.reset_pwd_service import ResetPwdService
 from domain.services.notification.service import NotifyService
-from domain.services.user.user_service_interface import UserServiceInterface
+from domain.services.user.user_service_interface import UserService
 
 
 class RequestChangePasswordUseCase:
     def __init__(
         self,
         notify_service: NotifyService,
-        user_service: UserServiceInterface,
+        user_service: UserService,
         reset_pwd_service: ResetPwdService,
     ):
         self.notify_service = notify_service

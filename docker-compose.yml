@@ -13,18 +13,39 @@ services:
     networks:
       - custom
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - db-command:/var/lib/postgresql/command
 
-  redis:
-    image: redis:7
-    container_name: redis_app
-    command: --port 6379
-    ports:
-      - "6379:6379"
-    expose:
-      - 6379
+  db-init:
+    image: postgres:15
+    container_name: db_init
+    depends_on:
+      - db
+    environment:
+      PGPASSWORD: postgres
     networks:
       - custom
+    command: >
+      bash -c "
+      sleep 5 &&
+      psql -h db_app -U postgres -f /docker-entrypoint-initdb.d/init-db.sql
+      "
+    volumes:
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak
+    ports:
+      - "8080:8080"
+    env_file:
+      - keycloak.env
+    command: start-dev
+    depends_on:
+      - db
+      - db-init
+    networks:
+      - custom
+    restart: unless-stopped
 
   fastapi_app:
     env_file:
@@ -39,54 +60,6 @@ services:
       - custom
     depends_on:
       - db
-      - redis
-
-  minio:
-    image: minio/minio
-    container_name: minio
-    ports:
-      - "9000:9000"  # Порт для S3-совместимого API
-      - "9001:9001"  # Порт для веб-консоли MinIO
-    environment:
-      MINIO_ROOT_USER: myaccesskey  # Замените на ключ доступа длиной от 3 символов
-      MINIO_ROOT_PASSWORD: mysecretpassword  # Замените на секретный ключ длиной от 8 символов
-    volumes:
-      - ./minio-data:/data  # Папка для хранения данных
-      - ./minio-config:/root/.minio  # Папка для конфигурационных файлов
-    command: server /data --console-address ":9001"
-    restart: always
-    networks:
-      - custom
-
-  mc:
-    image: minio/mc
-    depends_on:
-      - minio
-    entrypoint: >
-      /bin/sh -c "
-      sleep 10;
-      mc alias set myminio http://minio:9000 myaccesskey mysecretpassword;
-      mc mb myminio/users || true;
-      mc policy set private myminio/dodiq
-      "
-    networks:
-      - custom
-
-  app:
-    build: ./receipt_api
-    expose:
-      - "8080"
-    env_file:
-      - receipt_api/.env
-    networks:
-      - custom
-    volumes:
-      - ./receipt_api_logs:/app/logs  # Монтируем директорию для логов на хосте
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"         # Максимальный размер файла лога (например, 10 MB)
-        max-file: "5"
 
   nginx:
     image: nginx:latest
@@ -101,12 +74,8 @@ services:
     depends_on:
       - fastapi_app
       - db
-      - redis
-      - minio
-      - app
     networks:
       - custom
-
 
 networks:
   custom:

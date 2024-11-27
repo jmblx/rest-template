@@ -257,3 +257,16 @@
 2024/10/26 18:19:01 [emerg] 1#1: host not found in upstream "app:8080" in /etc/nginx/conf.d/app.conf:18
 2024/10/26 18:20:03 [emerg] 1#1: host not found in upstream "app:8080" in /etc/nginx/conf.d/app.conf:18
 2024/10/26 18:21:40 [emerg] 1#1: host not found in upstream "app:8080" in /etc/nginx/conf.d/app.conf:18
+2024/11/22 14:33:26 [crit] 1#1: pread() "/etc/nginx/conf.d/app.conf" failed (21: Is a directory)
+2024/11/22 14:49:34 [crit] 1#1: pread() "/etc/nginx/conf.d/app.conf" failed (21: Is a directory)
+2024/11/22 14:52:20 [crit] 1#1: pread() "/etc/nginx/conf.d/app.conf" failed (21: Is a directory)
+2024/11/22 14:53:49 [crit] 1#1: pread() "/etc/nginx/conf.d/app.conf" failed (21: Is a directory)
+2024/11/22 16:52:29 [crit] 1#1: pread() "/etc/nginx/conf.d/app.conf" failed (21: Is a directory)
+2024/11/22 16:59:04 [crit] 1#1: pread() "/etc/nginx/conf.d/app.conf" failed (21: Is a directory)
+2024/11/22 17:02:00 [crit] 1#1: pread() "/etc/nginx/conf.d/app.conf" failed (21: Is a directory)
+2024/11/22 17:02:31 [crit] 1#1: pread() "/etc/nginx/conf.d/app.conf" failed (21: Is a directory)
+2024/11/22 17:04:44 [crit] 1#1: pread() "/etc/nginx/conf.d/app.conf" failed (21: Is a directory)
+2024/11/22 17:47:32 [crit] 1#1: pread() "/etc/nginx/conf.d/app.conf" failed (21: Is a directory)
+2024/11/22 20:48:39 [crit] 1#1: pread() "/etc/nginx/conf.d/app.conf" failed (21: Is a directory)
+2024/11/22 21:13:38 [crit] 1#1: pread() "/etc/nginx/conf.d/app.conf" failed (21: Is a directory)
+2024/11/22 21:44:12 [crit] 1#1: pread() "/etc/nginx/conf.d/app.conf" failed (21: Is a directory)

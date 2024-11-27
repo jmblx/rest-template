@@ -5,6 +5,7 @@ from core.db.db_types import added_at
 
 BaseDec = declarative_base()
 
+
 class Base(BaseDec):
     __abstract__ = True
 

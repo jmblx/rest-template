@@ -24,7 +24,7 @@ async def test_update_user_via_graphql(
         mutation UpdateUsers {{
             updateUsers(
                 searchData: {{ id: "{mock_user.id}" }}
-                data: {{
+                command: {{
                     firstName: "{updated_data['firstName']}",
                     lastName: "{updated_data['lastName']}",
                 }}
@@ -50,8 +50,8 @@ async def test_update_user_via_graphql(
     assert response.status_code == 200
     data = response.json()
 
-    assert "data" in data
-    updated_user = data["data"]["updateUsers"][0]
+    assert "command" in data
+    updated_user = data["command"]["updateUsers"][0]
     assert updated_user["firstName"] == updated_data["firstName"]
     assert updated_user["lastName"] == updated_data["lastName"]
     assert updated_user["id"] == str(mock_user.id)

@@ -1,19 +1,18 @@
-import re
-import uuid
-from dataclasses import dataclass, field
-from datetime import datetime
-from typing import Union
-from uuid import UUID
-from decimal import Decimal, InvalidOperation
-
-from domain.common.entities.value_objects import ValueObject
-
-
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 import re
 from datetime import datetime
-from uuid import UUID
-from typing import Optional
+from uuid import UUID, uuid4
+
+from domain.exceptions.user import (
+    InvalidEmailError,
+    InvalidUserIDError,
+    InvalidRegisterDateError,
+    InvalidFilePathError,
+    InvalidCharacterError,
+    EmptyValueError,
+    InvalidPasswordError,
+)
+
 
 @dataclass(frozen=True)
 class RawPassword:
@@ -21,7 +20,7 @@ class RawPassword:
 
     def __post_init__(self):
         if not self._validate():
-            raise ValueError(
+            raise InvalidPasswordError(
                 "Invalid password. There must be at least one letter, one digit, "
                 "one allowed special character, and a minimum of 8 characters."
             )
@@ -37,49 +36,14 @@ class HashedPassword:
 
     def __post_init__(self):
         if not self.value or not isinstance(self.value, str):
-            raise ValueError("Hashed password must be a non-empty string.")
+            raise EmptyValueError(
+                "Hashed password must be a non-empty string."
+            )
 
-
-@dataclass(frozen=True)
-class FirstName:
-    value: str
-
-    def __post_init__(self):
-        if not self.value or not self.value.strip():
-            raise ValueError("First name cannot be empty.")
-        if not self.value.isalpha():
-            raise ValueError("First name must contain only alphabetic characters.")
-
-
-@dataclass(frozen=True)
-class LastName:
-    value: str
-
-    def __post_init__(self):
-        if not self.value or not self.value.strip():
-            raise ValueError("Last name cannot be empty.")
-        if not self.value.isalpha():
-            raise ValueError("Last name must contain only alphabetic characters.")
-
-
-@dataclass(frozen=True)
-class FilePath:
-    value: str
-
-    def __post_init__(self):
-        if not self.value or not isinstance(self.value, str):
-            raise ValueError("File path must be a valid string.")
-
-
-@dataclass(frozen=True)
-class RegisterDate:
-    value: datetime
-
-    def __post_init__(self):
-        if not isinstance(self.value, datetime):
-            raise ValueError("Register date must be a datetime instance.")
-        if self.value > datetime.now():
-            raise ValueError("Register date cannot be in the future.")
+    @staticmethod
+    def create(password: str, hash_service) -> "HashedPassword":
+        hashed = hash_service.hash_password(password)
+        return HashedPassword(hashed)
 
 
 @dataclass(frozen=True)
@@ -88,7 +52,11 @@ class UserID:
 
     def __post_init__(self):
         if not isinstance(self.value, UUID):
-            raise ValueError("UserID must be a valid UUID.")
+            raise InvalidUserIDError("UserID must be a valid UUID.")
+
+    @staticmethod
+    def generate():
+        return UserID(uuid4())
 
 
 @dataclass(frozen=True)
@@ -97,10 +65,9 @@ class Email:
 
     def __post_init__(self):
         if not self.is_valid_email(self.value):
-            raise ValueError(f"Invalid email address: {self.value}")
+            raise InvalidEmailError(f"Invalid email address: {self.value}")
 
     @staticmethod
     def is_valid_email(email: str) -> bool:
-        pattern = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
+        pattern = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
         return bool(re.match(pattern, email))
-

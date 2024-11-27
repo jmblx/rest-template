@@ -102,7 +102,7 @@ async def auth_headers(ac: AsyncClient) -> dict:
 
     assert response.status_code == 200
     data = response.json()
-    access_token = data["data"]["authUser"]["accessToken"]
+    access_token = data["command"]["authUser"]["accessToken"]
     headers["Authorization"] = f"Bearer {access_token}"
     return headers
 

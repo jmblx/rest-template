@@ -9,26 +9,22 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import configure_mappers
 
 from core.di.container import container
-from presentation.web_api.registration.router import router as reg_router
-from core.gunicorn.app_options import get_app_options
-from core.gunicorn.application import Application
-
+from infrastructure.gunicorn.app_options import get_app_options
+from infrastructure.gunicorn.application import Application
 import core.db.logs  # noqa: F401
-from settings.config import app_settings
+from infrastructure.gunicorn.config import app_settings
 
-# Конфигурируем мапперы
 configure_mappers()
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(app: FastAPI) -> None:
     yield
     await app.state.dishka_container.close()
 
-# Создание экземпляра FastAPI с определенным lifespan
+
 app = FastAPI(lifespan=lifespan, root_path="/api")
 
-# Настройка интеграции Dishka с FastAPI
 setup_dishka(container=container, app=app)
 
 logger = logging.getLogger("fastapi")

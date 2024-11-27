@@ -2,13 +2,13 @@ from uuid import UUID
 
 from application.dtos.set_image import ImageDTO
 from domain.services.storage.storage_service import StorageServiceInterface
-from domain.services.user.user_service_interface import UserServiceInterface
+from domain.services.user.user_service_interface import UserService
 
 
 class SetAvatarUseCase:
     def __init__(
         self,
-        user_service: UserServiceInterface,
+        user_service: UserService,
         minio_service: StorageServiceInterface,
     ):
         self.user_service = user_service

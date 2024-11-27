@@ -12,5 +12,4 @@ RUN pip install --upgrade pip && \
 
 COPY . .
 
-# Применим права на файл app.sh с указанием полного пути
 RUN chmod +x /fastapi_app/docker/app.sh

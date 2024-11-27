@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Any, Generic
 from uuid import UUID
 
-from infrastructure.repositories.base_repository import T
+from infrastructure.db.repositories.base_repository import T
 
 
 class EntityService(ABC, Generic[T]):
@@ -14,7 +14,9 @@ class EntityService(ABC, Generic[T]):
         """Получение сущности по ID"""
 
     @abstractmethod
-    async def get_random_rows(self, amount: int, exclude_ids: list[int] | None = None) -> list[T]: ...
+    async def get_random_rows(
+        self, amount: int, exclude_ids: list[int] | None = None
+    ) -> list[T]: ...
 
     @abstractmethod
     async def create(

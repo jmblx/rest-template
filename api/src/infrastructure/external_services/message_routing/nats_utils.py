@@ -25,7 +25,7 @@ async def send_via_nats(
 
 
 # async def process_notifications(
-#     data: dict,
+#     command: dict,
 #     notify_from_data_kwargs: dict[str, str] | None,
 #     notify_kwargs: dict[str, str] | None,
 #     notify_subject: str | None,
@@ -37,9 +37,9 @@ async def send_via_nats(
 #     if notify_from_data_kwargs is not None:
 #         notify_kwargs.update(
 #             {
-#                 k: data.__dict__[v]
+#                 k: command.__dict__[v]
 #                 for k, v in notify_from_data_kwargs.items()
-#                 if v in data.__dict__
+#                 if v in command.__dict__
 #             }
 #         )
 #
@@ -49,7 +49,7 @@ async def send_via_nats(
 #         await send_via_nats(
 #             nats_client=nats_client,
 #             subject=notify_subject,
-#             data=notify_kwargs,
+#             command=notify_kwargs,
 #         )
 #
 #     if need_update:

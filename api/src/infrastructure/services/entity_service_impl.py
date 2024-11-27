@@ -3,7 +3,7 @@ from uuid import UUID
 
 from domain.repositories.base_repo import BaseRepository
 from domain.services.entity_service import EntityService
-from infrastructure.repositories.base_repository import T
+from infrastructure.db.repositories.base_repository import T
 
 
 class EntityServiceImpl(EntityService[T], Generic[T]):
@@ -21,9 +21,7 @@ class EntityServiceImpl(EntityService[T], Generic[T]):
         self,
         entity_id: int | UUID,
     ) -> T:
-        entity = await self._base_repo.get_by_fields(
-            {"id": entity_id}
-        )
+        entity = await self._base_repo.get_by_fields({"id": entity_id})
         return entity
 
     async def get_by_fields(
@@ -43,9 +41,7 @@ class EntityServiceImpl(EntityService[T], Generic[T]):
         self,
         search_params: dict[str, Any],
     ) -> list[T]:
-        entities = await self._base_repo.get_many_by_fields(
-            search_params
-        )
+        entities = await self._base_repo.get_many_by_fields(search_params)
         return entities
 
     async def update_by_fields(

@@ -37,8 +37,8 @@ async def test_update_user_via_graphql(
     assert response.status_code == 200
     data = response.json()
 
-    assert "data" in data
-    updated_user = data["data"]["deleteUsersWithResponse"][0]
+    assert "command" in data
+    updated_user = data["command"]["deleteUsersWithResponse"][0]
     assert updated_user["firstName"] == mock_user.first_name
     assert updated_user["email"] == mock_user.email
     assert updated_user["id"] == str(mock_user.id)
